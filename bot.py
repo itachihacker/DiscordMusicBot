@@ -87,9 +87,14 @@ async def play(ctx, url):
         await channel.connect()
 
     ydl_opts = {
-        "format": "bestaudio[ext=m4a]/bestaudio/best",
+        "format": "bestaudio/best",
         "noplaylist": True,
         "quiet": True,
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["web_safari"]
+            }
+        },
     }
 
     await ctx.send("Downloading music... 🎵")
