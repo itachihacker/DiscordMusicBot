@@ -3,7 +3,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os
 import yt_dlp
-import asyncio
 
 load_dotenv()
 
@@ -49,9 +48,8 @@ async def on_ready():
         except Exception as e:
             print(f"Auto join error: {e}")
 
-    else:
-        if voice_client.channel != channel:
-            await voice_client.move_to(channel)
+    elif voice_client.channel != channel:
+        await voice_client.move_to(channel)
 
 
 @bot.command()
@@ -85,16 +83,14 @@ async def play(ctx, url):
 
     if ctx.voice_client is None:
         await channel.connect()
+    elif ctx.voice_client.channel != channel:
+        await ctx.voice_client.move_to(channel)
 
     ydl_opts = {
         "format": "bestaudio/best",
         "noplaylist": True,
         "quiet": True,
-        "extractor_args": {
-            "youtube": {
-                "player_client": ["web_safari"]
-            }
-        },
+        "no_warnings": True,
     }
 
     await ctx.send("Downloading music... 🎵")
